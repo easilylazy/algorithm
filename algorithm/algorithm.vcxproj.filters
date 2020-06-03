@@ -26,10 +26,10 @@
     <ClCompile Include="bst\src\bst.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="bst\src\main.cpp">
+    <ClCompile Include="array\array.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="array\array.cpp">
+    <ClCompile Include="array\main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -114,9 +114,9 @@ int main(void)
 					cout << endl;
 				}
 				//比较二者是否相同，若不同，打印消息
-				if (!sameBst(root, reconstruct2)) {
+				if (!sameBst(root, reconstruct2)) 
 					cout << "**********222222****not same*******222222******" << endl;
-				}
+				
 
 				recycle(reconstruct2);
 			}

@@ -24,8 +24,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="array\array.cpp" />
+    <ClCompile Include="array\main.cpp" />
     <ClCompile Include="bst\src\bst.cpp" />
-    <ClCompile Include="bst\src\main.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
