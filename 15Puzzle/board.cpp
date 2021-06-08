@@ -16,11 +16,15 @@ Board::Board(int size=4)
     board[size_max][size_max]=0;
     space.col=size_max;
     space.row=size_max;
+    target=board;
 }
 void Board::init(){
     
 }
 void Board::print(){
+    print(board);
+}
+void Board::print(board_type board){
     for(auto row:board){
         for(auto item:row){
             cout<<setw(5)<<item<<' ';
@@ -52,6 +56,9 @@ void Board::possible_direction(){
     
 }
 void Board::exec_direction(int direction){
+    exec_direction(board,direction);
+}
+void Board::exec_direction(board_type &board,int direction){
     if(VERBOSE){
         cout<<"go "<<info[direction]<<endl;
     }
@@ -80,6 +87,41 @@ void Board::exec_direction(int direction){
     
     default:
         break;
+    }
+}
+void Board::BFS(){
+    queue<board_type> open;
+    open.push(board);
+    board_type present;
+    int cnt=0;
+    while(!open.empty()){
+        cnt++;
+        if(cnt>3){
+            break;
+        }
+        board=open.front();
+        present=board;
+        possible_direction();
+        // for specific state 
+        for(int i=0;i<4;i++){
+            board=present;
+            if(possible_direct[i]){
+                exec_direction(board,i);
+                records[make_pair(present,i)]=board;
+                // add new appearance
+                if(visited.find(board)==visited.end()){
+                    open.push(board);
+                }
+            }
+        }
+        visited[board]=true;
+        
+    }
+}
+void Board::display(){
+    for(auto item: records){
+        
+        cout<<item.first.second<<endl;
     }
 }
 Board::~Board()
