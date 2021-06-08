@@ -1,6 +1,8 @@
 # include<iostream>
 # include<iomanip>
 # include<vector>
+# define SPACE_FILL 0
+# define VERBOSE true
 using namespace std;
 enum Direction{
     Up,Down,Left,Right,
@@ -25,10 +27,10 @@ public:
 class Board
 {
 private:
-    vector<vector<int>> board;
     Site space;
 
 public:
+    vector<vector<int>> board;
     int size_max;
     int size_min;
     bool possible_direct[4];
@@ -37,6 +39,7 @@ public:
     Board(int);
     void print();
     void possible_direction();
+    void exec_direction(int direction);
     ~Board();
 
 };

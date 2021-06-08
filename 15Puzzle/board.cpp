@@ -42,10 +42,44 @@ void Board::possible_direction(){
     }else if(space.col==size_min){
         possible_direct[Left]=false;
     }
-    for(int i=0;i<4;i++){
-        if(possible_direct[i]==true){
-            cout<<info[i]<<" is possible"<<endl;
+    if(VERBOSE){
+        for(int i=0;i<4;i++){
+            if(possible_direct[i]==true){
+                cout<<info[i]<<" is possible"<<endl;
+            }
         }
+    }
+    
+}
+void Board::exec_direction(int direction){
+    if(VERBOSE){
+        cout<<"go "<<info[direction]<<endl;
+    }
+    switch (direction)
+    {
+    case Up:
+        board[space.row][space.col]=board[space.row-1][space.col];
+        board[space.row-1][space.col]=SPACE_FILL;
+        space.row-=1;
+        break;
+    case Down:
+        board[space.row][space.col]=board[space.row+1][space.col];
+        board[space.row+1][space.col]=SPACE_FILL;
+        space.row+=1;
+        break;
+    case Left:
+        board[space.row][space.col]=board[space.row][space.col-1];
+        board[space.row][space.col-1]=SPACE_FILL;
+        space.col-=1;
+        break;
+    case Right:
+        board[space.row][space.col]=board[space.row][space.col+1];
+        board[space.row][space.col+1]=SPACE_FILL;
+        space.col+=1;
+        break;
+    
+    default:
+        break;
     }
 }
 Board::~Board()
