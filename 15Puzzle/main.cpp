@@ -9,5 +9,6 @@ using namespace std;
 int main(void){
     Board demo(3);
     demo.print();
+    demo.possible_direction();
     return 0;
 }
