@@ -39,7 +39,7 @@ public:
     vector<vector<int>> target;
     vector<vector<int>> start;
     map<record_type,board_type> records;
-    map<board_type,board_type> mapping;
+    map<board_type,record_type> useful;
     map<board_type,bool> visited; 
     int size_max;
     int size_min;

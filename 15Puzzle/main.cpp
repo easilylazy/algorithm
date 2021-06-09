@@ -9,7 +9,7 @@ using namespace std;
 int main(void){
     Board demo(3);
     demo.print();
-    demo.shuffle(5);
+    demo.shuffle(38);
     // demo.possible_direction();
     // demo.exec_direction(Up);
     // demo.print();

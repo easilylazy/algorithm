@@ -117,34 +117,31 @@ void Board::shuffle(int steps){
     start=board;
 }
 void Board::path(){
-    board=start;
+    board=target;
+    record_type next;
     int max_step=30;
-    stack<direct_type> store;
-    map<board_type,bool> pass;
-    board_type next;
-    pass[board]=true;
-    while(board!=target){
-
+    stack<direct_type> confirm_path;
+    stack<board_type> confirm_state;
+    while(board!=start){
         if(max_step--<0){
             cout<<"failed"<<endl;
             break;
         }
-        for(auto item:records){
-            if(item.second==board&&pass.find(item.first.first)==pass.end()){
-                store.push(item.first.second);
-                print(board);
-                cout<<info[item.first.second]<<endl;
-                board=item.first.first;
-                pass[board]==true;
-                // break;
-            }
-        }
-    }
-    while(!store.empty()){
-        cout<<info[store.top()]<<endl;
-        store.pop();
+        next=useful[board];
+        // cout<<info[next.second]<<endl;
+        // print(next.first);
+        board=next.first;
+        confirm_state.push(next.first);
+        confirm_path.push(next.second);
 
     }
+    while(!confirm_path.empty()){
+        print(confirm_state.top());
+        cout<<info[confirm_path.top()]<<endl;
+        confirm_state.pop();
+        confirm_path.pop();
+    }
+    print(target);
 }
 void Board::BFS(){
     queue<board_type> open;
@@ -159,6 +156,7 @@ void Board::BFS(){
         // }
         board=open.front();
         if(board==target){
+            cout<<"achieve target"<<endl;
             break;
         }
         present=board;
@@ -178,7 +176,9 @@ void Board::BFS(){
                 if(visited.find(board)==visited.end()){
                     open.push(board);
                 }
-                // mapping[board]=present;
+                if(useful.find(board)==useful.end()){
+                    useful[board]=make_pair(present,i);
+                }
             }
         }
         visited[board]=true;
