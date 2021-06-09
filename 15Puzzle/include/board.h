@@ -4,7 +4,7 @@
 # include<map>
 # include<queue>
 # define SPACE_FILL 0
-# define VERBOSE true
+# define VERBOSE false//true
 using namespace std;
 typedef vector<vector<int>> board_type;
 typedef int direct_type;
@@ -37,7 +37,9 @@ private:
 public:
     vector<vector<int>> board;
     vector<vector<int>> target;
+    vector<vector<int>> start;
     map<record_type,board_type> records;
+    map<board_type,board_type> mapping;
     map<board_type,bool> visited; 
     int size_max;
     int size_min;
@@ -48,9 +50,13 @@ public:
     void print();
     void print(board_type board);
     void display();
+    Site locate_space();
+    Site locate_space(board_type board);
     void possible_direction();
-    void exec_direction(board_type &board,int direction);
-    void exec_direction(int direction);
+    void exec_direction(board_type &board,int direction,Site &space);
+    void exec_direction(int direction,Site &space);
+    void shuffle(int steps=10);
+    void path();
     void BFS();
     ~Board();
 

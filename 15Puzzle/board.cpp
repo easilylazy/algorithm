@@ -1,5 +1,5 @@
 # include"include/board.h"
-
+# include<stack>
 Board::Board(int size=4)
 {
     size_max=size-1;
@@ -32,6 +32,19 @@ void Board::print(board_type board){
         cout<<endl;
     }
 }
+Site Board::locate_space(){
+    return locate_space(board);
+}
+Site Board::locate_space(board_type board){
+    for(int i=0;i<=size_max;i++){
+        for(int j=0;j<=size_max;j++){
+            if(board[i][j]==SPACE_FILL){
+                return Site(i,j);
+            }
+        }
+    } 
+    return Site(0,0);
+}
 void Board::possible_direction(){
     for(int i=0;i<4;i++){
         possible_direct[i]=true;
@@ -55,10 +68,10 @@ void Board::possible_direction(){
     }
     
 }
-void Board::exec_direction(int direction){
-    exec_direction(board,direction);
+void Board::exec_direction(int direction,Site &space){
+    exec_direction(board,direction,space);
 }
-void Board::exec_direction(board_type &board,int direction){
+void Board::exec_direction(board_type &board,int direction,Site &space){
     if(VERBOSE){
         cout<<"go "<<info[direction]<<endl;
     }
@@ -89,39 +102,98 @@ void Board::exec_direction(board_type &board,int direction){
         break;
     }
 }
-void Board::BFS(){
-    queue<board_type> open;
-    open.push(board);
-    board_type present;
-    int cnt=0;
-    while(!open.empty()){
-        cnt++;
-        if(cnt>3){
+void Board::shuffle(int steps){
+    space=locate_space(board);
+    for(int i=0;i<steps;i++){
+        possible_direction();
+
+        int direct=rand()%4; 
+        while(possible_direct[direct]!=true){
+            direct=rand()%4;
+        }
+        exec_direction(direct,space);
+    }
+    print(board);
+    start=board;
+}
+void Board::path(){
+    board=start;
+    int max_step=30;
+    stack<direct_type> store;
+    map<board_type,bool> pass;
+    board_type next;
+    pass[board]=true;
+    while(board!=target){
+
+        if(max_step--<0){
+            cout<<"failed"<<endl;
             break;
         }
+        for(auto item:records){
+            if(item.second==board&&pass.find(item.first.first)==pass.end()){
+                store.push(item.first.second);
+                print(board);
+                cout<<info[item.first.second]<<endl;
+                board=item.first.first;
+                pass[board]==true;
+                // break;
+            }
+        }
+    }
+    while(!store.empty()){
+        cout<<info[store.top()]<<endl;
+        store.pop();
+
+    }
+}
+void Board::BFS(){
+    queue<board_type> open;
+    open.push(start);
+    board_type present;
+    Site temp_space;
+    int cnt=0;
+    while(!open.empty()){
+        // cnt++;
+        // if(cnt>30){
+        //     break;
+        // }
         board=open.front();
+        if(board==target){
+            break;
+        }
         present=board;
-        possible_direction();
         // for specific state 
+        temp_space=locate_space(board);
+        space=temp_space;
+        possible_direction();
+
         for(int i=0;i<4;i++){
-            board=present;
+            
             if(possible_direct[i]){
-                exec_direction(board,i);
+                board=present;
+                temp_space=space;
+                exec_direction(board,i,temp_space);
                 records[make_pair(present,i)]=board;
                 // add new appearance
                 if(visited.find(board)==visited.end()){
                     open.push(board);
                 }
+                // mapping[board]=present;
             }
         }
         visited[board]=true;
+        open.pop();
         
     }
 }
 void Board::display(){
     for(auto item: records){
+        cout<<"before"<<endl;
+        print(item.first.first);
         
         cout<<item.first.second<<endl;
+        cout<<"after"<<endl;
+        print(item.second);
     }
 }
 Board::~Board()

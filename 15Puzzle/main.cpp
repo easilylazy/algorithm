@@ -9,10 +9,15 @@ using namespace std;
 int main(void){
     Board demo(3);
     demo.print();
-    demo.possible_direction();
-    demo.exec_direction(Up);
-    demo.print();
-    demo.possible_direction();
+    demo.shuffle(5);
+    // demo.possible_direction();
+    // demo.exec_direction(Up);
+    // demo.print();
+    // demo.possible_direction();
+
+    demo.BFS();
+    demo.path();
+    // demo.display();
     return 0;
 
 
