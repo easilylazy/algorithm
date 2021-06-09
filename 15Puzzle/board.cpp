@@ -125,7 +125,7 @@ void Board::path(){
     while(board!=start){
         if(max_step--<0){
             cout<<"failed"<<endl;
-            break;
+            return;
         }
         next=useful[board];
         // cout<<info[next.second]<<endl;
@@ -135,9 +135,10 @@ void Board::path(){
         confirm_path.push(next.second);
 
     }
+    max_step=0;
     while(!confirm_path.empty()){
         print(confirm_state.top());
-        cout<<info[confirm_path.top()]<<endl;
+        cout<<"step "<<++max_step<<" "<<info[confirm_path.top()]<<endl;
         confirm_state.pop();
         confirm_path.pop();
     }
