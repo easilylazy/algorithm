@@ -34,7 +34,9 @@ void MapGraph::astar(){
         // find the smallest in the open
         minCost=open[0].second;
         minSite=0;
-        
+        cout<<"minCost"<<minCost<<endl;
+        cout<<open[0].first;
+        cout<<open.size()<<endl;
         for(int i=1;i<open.size();i++){
             auto item=open[i];
             if(item.second<minCost){
@@ -48,23 +50,46 @@ void MapGraph::astar(){
         // visit current minCost
         // find its neighboor and update the cost
         Site updated;
+        int cost;
+        // map<Site,pair<Site,int>>::iterator old;
         for(enum Direction d=Direction(DirectionMin+1);d<DirectionMax;d=Direction(d+1)){
             updated=current.chooseDirection(d);
-            if(updated.inside(upLeft,downRight)){
-                cout<<updated;
-            }
+            cout<<updated;
+            if(updated>=upLeft&&updated<=downRight){
+                // cout<<updated;
+                if(updated==dst){
+                    cout<< "success"<<endl;
+                    cout<<"cost: "<<minCost+graph[updated.Col()][updated.Row()]<<endl;
+                }
+                auto old= closed.find(updated);
+                if(old==closed.end()){
+                    cost=minCost+graph[updated.Col()][updated.Row()];
+                    closed[updated]=make_pair(current,cost);
+                    open.push_back(make_pair(updated,cost));
+                    // cout<<"end: "<<closed.end()->second.second;
 
+                }else if(old->second.second>minCost){
+                    closed[updated]=make_pair(current,cost);
+                open.push_back(make_pair(updated,cost));
+                // cout<<updated;
+                // cout<<"cost: "<<cost<<endl;
+                    
+                    
+                }
+                
+
+
+            }
         }
 
 
     }
 
-
-
-    if(src==dst){
-        cout<<"equal"<<endl;
-    }else{
-        cout<<"unequal"<<endl;
-
+    for(auto item:closed){
+        cout<<item.first;
+        cout<<"from:"<<endl;
+        cout<<item.second.first;
+        cout<<"cost:"<<endl;
+        cout<<item.second.second;
     }
 }

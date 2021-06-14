@@ -9,6 +9,12 @@ private:
     int x;
     int y;
 public:
+    int Row(){
+        return x;
+    }
+    int Col(){
+        return y;
+    }
     Site(){
         x=0;
         y=0;
@@ -48,11 +54,19 @@ public:
     Site down(int bias=1){
         return Site(x+1,y);
     }
-    bool inside(Site upLeft,Site downRight){
+    bool inside(const Site &upLeft,const Site &downRight){
         if(*this>=upLeft&&*this<=downRight){
             return true;
         }
         return false;
+    }
+    // for map::find()
+	bool operator() (const Site &left ,const Site& right) const{
+        if(left.x!=right.x){
+            return left.x<right.x;
+        }
+        return left.y<right.y;
+
     }
     bool operator>=(const Site &site){
         if(this->x>=site.x&&this->y>=site.y){
@@ -71,6 +85,12 @@ public:
             return true;
         }
         return false;
+    }
+    friend bool operator < (const Site &left, const Site &right){
+        if(left.x!=right.x){
+            return left.x<right.x;
+        }
+        return left.y<right.y;
     }
     friend ostream &operator <<(ostream & os, const Site & s){
         os<<"x: "<<s.x<<" y: "<<s.y<<endl;
