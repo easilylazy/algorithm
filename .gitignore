@@ -3,3 +3,4 @@ test/
 feature/
 build/
 !CMakeLists.txt
+.vscode/
