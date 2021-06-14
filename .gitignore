@@ -1,0 +1,5 @@
+test/
+*txt
+feature/
+build/
+!CMakeLists.txt
