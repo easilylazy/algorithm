@@ -34,9 +34,13 @@ void MapGraph::astar(){
         // find the smallest in the open
         minCost=open[0].second;
         minSite=0;
+        current=open[0].first;
         cout<<"minCost"<<minCost<<endl;
         cout<<open[0].first;
         cout<<open.size()<<endl;
+        // if(open[0].first.Row()==2){
+        //     cout<<"here"<<endl;
+        // }
         for(int i=1;i<open.size();i++){
             auto item=open[i];
             if(item.second<minCost){
