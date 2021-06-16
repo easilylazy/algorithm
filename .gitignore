@@ -4,3 +4,4 @@ feature/
 build/
 !CMakeLists.txt
 .vscode/
+*exe
