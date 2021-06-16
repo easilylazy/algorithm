@@ -26,6 +26,8 @@ void MapGraph::astar(){
 
     // first: push src 
     open.push_back(make_pair(src,0));
+    closed[src]=make_pair(src,0);
+
 
     Site current;
     int minCost;
@@ -35,9 +37,7 @@ void MapGraph::astar(){
         minCost=open[0].second;
         minSite=0;
         current=open[0].first;
-        // if(open[0].first.Row()==2){
-        //     cout<<"here"<<endl;
-        // }
+
         for(int i=1;i<open.size();i++){
             auto item=open[i];
             if(item.second<minCost){
@@ -45,6 +45,9 @@ void MapGraph::astar(){
                 current=item.first;
                 minSite=i;
             }
+        }
+        if(current==Site(1,0)){
+            cout<<"here"<<endl;
         }
         open[minSite]=open[open.size()-1];
         open.pop_back();
@@ -55,44 +58,45 @@ void MapGraph::astar(){
         // map<Site,pair<Site,int>>::iterator old;
         for(enum Direction d=Direction(DirectionMin+1);d<DirectionMax;d=Direction(d+1)){
             updated=current.chooseDirection(d);
+            if(updated==Site(1,2)){
+                cout<<"here"<<endl;
+            }
             if(updated>=upLeft&&updated<=downRight){
+                cost=minCost+graph[updated.Row()][updated.Col()];
+
                 // cout<<updated;
                 if(updated==dst){
                     cout<< "success"<<endl;
                     cout<<"cost: "<<minCost+graph[updated.Row()][updated.Col()]<<endl;
-                    cost=minCost+graph[updated.Row()][updated.Col()];
-                    closed[updated]=make_pair(current,cost);
-                    break;
+                    // closed[updated]=make_pair(current,cost);
+                    showCost();
+
+                    // break;
                 }
                 auto old= closed.find(updated);
+
                 if(old==closed.end()){
-                    cost=minCost+graph[updated.Row()][updated.Col()];
                     closed[updated]=make_pair(current,cost);
                     open.push_back(make_pair(updated,cost));
+                    showCost();
 
                 }
-                // else if(old->second.second>minCost){
-                //     closed[updated]=make_pair(current,cost);
-                //     open.push_back(make_pair(updated,cost));
-                // // cout<<updated;
-                // // cout<<"cost: "<<cost<<endl;
+                else if(old->second.second>cost){
+                    closed[updated]=make_pair(current,cost);
+                    open.push_back(make_pair(updated,cost));
+                    showCost();
+
+                // cout<<updated;
+                // cout<<"cost: "<<cost<<endl;
                     
                     
-                // }
+                }
                 
             }
         }
 
 
     }
-
-    // for(auto item:closed){
-    //     cout<<item.first;
-    //     cout<<"from:"<<endl;
-    //     cout<<item.second.first;
-    //     cout<<"cost: ";
-    //     cout<<item.second.second<<endl;
-    // }
     cout<<"*****************"<<endl;
     int count=0;
     current=dst;
@@ -109,8 +113,24 @@ void MapGraph::astar(){
         path[current]=true;
     }
 }
+void MapGraph::showCost(){
+    cout<<"\n"<<endl;
+    int cost;
+    
+    for(int i=0;i<map_size;i++){
+        for(int j=0;j<map_size;j++){
+            auto res=closed.find(Site(i,j));
+            if(res!=closed.end()){
+                cout<<res->second.second <<" ";
+            }else{
+                cout<<"() ";
+            }
+        }
+        cout<<endl;
+    }
+}
 void MapGraph::showMap(){
-    cout<<endl;
+    cout<<"\n"<<endl;
     for(int i=0;i<map_size;i++){
         for(int j=0;j<map_size;j++){
             cout<<graph[i][j]<<" ";
@@ -120,10 +140,9 @@ void MapGraph::showMap(){
 }
 void MapGraph::showPath(){
     showMap();
-    cout<<endl;
+    cout<<"\n"<<endl;
     for(int i=0;i<map_size;i++){
         for(int j=0;j<map_size;j++){
-            // graph[i][j]=rand()%(cost_max-cost_min)+cost_min;
             if(path.find(Site(i,j))!=path.end()){
                 cout<<graph[i][j]<<" ";
             }else{

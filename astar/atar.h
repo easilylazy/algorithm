@@ -30,4 +30,5 @@ public:
     void astar();
     void showMap();
     void showPath();
+    void showCost();
 };
