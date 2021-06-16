@@ -58,6 +58,7 @@ public:
     void shuffle(int steps=10);
     void path();
     void BFS();
+    void DFS();
     ~Board();
 
 };

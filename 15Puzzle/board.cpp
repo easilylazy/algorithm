@@ -144,20 +144,66 @@ void Board::path(){
     }
     print(target);
 }
+void Board::DFS(){
+    stack<board_type> open;
+    board_type present;
+    Site temp_space;
+    open.push(start);
+    visited[start]=true;
+    int cnt=0;
+
+    while(!open.empty()){
+        if(++cnt>30){
+            cout<<"failed"<<endl;
+            break;
+        }
+        board=open.top();
+        if(board==target){
+            cout<<"DFS achieve target"<<endl;
+            break;
+        }
+        present=board;
+        // for specific state 
+        temp_space=locate_space(board);
+        space=temp_space;
+        possible_direction();
+        for(int i=0;i<4;i++){
+            if(possible_direct[i]){
+                temp_space=space;
+                board=present;
+
+                exec_direction(i,temp_space);
+                if(useful.find(board)==useful.end()){
+                    print(board);
+                    cout<<"--------------------"<<endl;
+                    useful[board]=make_pair(present,i);
+
+                    if(board==target){
+                        cout<<"DFS achieve target"<<endl;
+                        // break;
+                    }
+                }
+                if(visited.find(board)==visited.end()){
+                    open.push(board);
+                    visited[board]=true;
+                }
+            }
+        }
+        
+        open.pop();
+
+    }
+    
+}
 void Board::BFS(){
     queue<board_type> open;
     open.push(start);
     board_type present;
     Site temp_space;
-    int cnt=0;
     while(!open.empty()){
-        // cnt++;
-        // if(cnt>30){
-        //     break;
-        // }
         board=open.front();
         if(board==target){
-            cout<<"achieve target"<<endl;
+            cout<<"BFS achieve target"<<endl;
             break;
         }
         present=board;
