@@ -28,6 +28,7 @@ private:
 public:
     MapGraph(int size);
     void astar();
+    void sortPath();
     void showMap();
     void showPath();
     void showCost();
