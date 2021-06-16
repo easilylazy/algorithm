@@ -13,7 +13,7 @@ Board::Board(int size=4)
         }
         board[row]=row_content;
     }   
-    board[size_max][size_max]=0;
+    board[size_max][size_max]=SPACE_FILL;
     space.col=size_max;
     space.row=size_max;
     target=board;
@@ -113,7 +113,6 @@ void Board::shuffle(int steps){
         }
         exec_direction(direct,space);
     }
-    print(board);
     start=board;
 }
 void Board::path(){
