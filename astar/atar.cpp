@@ -96,4 +96,7 @@ void MapGraph::astar(){
         cout<<"cost:"<<endl;
         cout<<item.second.second;
     }
+
+
+
 }
