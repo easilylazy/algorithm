@@ -35,9 +35,6 @@ void MapGraph::astar(){
         minCost=open[0].second;
         minSite=0;
         current=open[0].first;
-        cout<<"minCost"<<minCost<<endl;
-        cout<<open[0].first;
-        cout<<open.size()<<endl;
         // if(open[0].first.Row()==2){
         //     cout<<"here"<<endl;
         // }
@@ -58,45 +55,81 @@ void MapGraph::astar(){
         // map<Site,pair<Site,int>>::iterator old;
         for(enum Direction d=Direction(DirectionMin+1);d<DirectionMax;d=Direction(d+1)){
             updated=current.chooseDirection(d);
-            cout<<updated;
             if(updated>=upLeft&&updated<=downRight){
                 // cout<<updated;
                 if(updated==dst){
                     cout<< "success"<<endl;
-                    cout<<"cost: "<<minCost+graph[updated.Col()][updated.Row()]<<endl;
+                    cout<<"cost: "<<minCost+graph[updated.Row()][updated.Col()]<<endl;
+                    cost=minCost+graph[updated.Row()][updated.Col()];
+                    closed[updated]=make_pair(current,cost);
+                    break;
                 }
                 auto old= closed.find(updated);
                 if(old==closed.end()){
-                    cost=minCost+graph[updated.Col()][updated.Row()];
+                    cost=minCost+graph[updated.Row()][updated.Col()];
                     closed[updated]=make_pair(current,cost);
                     open.push_back(make_pair(updated,cost));
-                    // cout<<"end: "<<closed.end()->second.second;
 
-                }else if(old->second.second>minCost){
-                    closed[updated]=make_pair(current,cost);
-                open.push_back(make_pair(updated,cost));
-                // cout<<updated;
-                // cout<<"cost: "<<cost<<endl;
-                    
-                    
                 }
+                // else if(old->second.second>minCost){
+                //     closed[updated]=make_pair(current,cost);
+                //     open.push_back(make_pair(updated,cost));
+                // // cout<<updated;
+                // // cout<<"cost: "<<cost<<endl;
+                    
+                    
+                // }
                 
-
-
             }
         }
 
 
     }
 
-    for(auto item:closed){
-        cout<<item.first;
+    // for(auto item:closed){
+    //     cout<<item.first;
+    //     cout<<"from:"<<endl;
+    //     cout<<item.second.first;
+    //     cout<<"cost: ";
+    //     cout<<item.second.second<<endl;
+    // }
+    cout<<"*****************"<<endl;
+    int count=0;
+    current=dst;
+    path[current]=true;
+    while(current!=src){
+        if(++count>20){
+            break;
+        }
         cout<<"from:"<<endl;
-        cout<<item.second.first;
+        cout<<closed[current].first;
         cout<<"cost:"<<endl;
-        cout<<item.second.second;
+        cout<<closed[current].second<<endl;
+        current=closed[current].first;
+        path[current]=true;
     }
-
-
-
+}
+void MapGraph::showMap(){
+    cout<<endl;
+    for(int i=0;i<map_size;i++){
+        for(int j=0;j<map_size;j++){
+            cout<<graph[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+}
+void MapGraph::showPath(){
+    showMap();
+    cout<<endl;
+    for(int i=0;i<map_size;i++){
+        for(int j=0;j<map_size;j++){
+            // graph[i][j]=rand()%(cost_max-cost_min)+cost_min;
+            if(path.find(Site(i,j))!=path.end()){
+                cout<<graph[i][j]<<" ";
+            }else{
+                cout<<"  ";
+            }
+        }
+        cout<<endl;
+    }
 }

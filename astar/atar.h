@@ -5,8 +5,6 @@
 
 #define DIRECTION_MAX 4
 using namespace std;
-enum Direction{DirectionMin,Left,Right,Up,Down,DirectionMax};
-
 class MapGraph{
 private:
     int cost_min=0;
@@ -21,12 +19,15 @@ private:
     // vector<Site> open;
 
     map<Site,pair<Site,int>> closed;// smallest cost
-    // map<Site,int> open;
     vector<pair<Site,int>> open;
+    map<Site,bool> path;
+
     // stack<Site,
 
 
 public:
     MapGraph(int size);
     void astar();
+    void showMap();
+    void showPath();
 };
