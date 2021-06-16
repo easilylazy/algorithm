@@ -12,6 +12,7 @@ private:
     int map_size;
     int map_size_min;
     int map_size_max;
+    
     vector<vector<int>> graph;
     Site src,dst;
     Site upLeft,downRight;
@@ -26,6 +27,7 @@ private:
 
 
 public:
+    bool verbose=false;
     MapGraph(int size);
     void astar();
     void sortPath();

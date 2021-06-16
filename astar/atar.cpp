@@ -54,26 +54,31 @@ void MapGraph::astar(){
             updated=current.chooseDirection(d);
             if(updated>=upLeft&&updated<=downRight){
                 cost=minCost+graph[updated.Row()][updated.Col()];
-
-                // cout<<updated;
-                if(updated==dst){
-                    cout<< "success"<<endl;
-                    cout<<"cost: "<<minCost+graph[updated.Row()][updated.Col()]<<endl;
-                    showCost();
-                    // break;
-                }
                 auto old= closed.find(updated);
 
                 if(old==closed.end()){
                     closed[updated]=make_pair(current,cost);
                     open.push_back(make_pair(updated,cost));
-                    showCost();
+                    if(verbose){
+                        showCost();
+                        if(updated==dst){
+                            cout<< "achieve dst"<<endl;
+                            cout<<"cost: "<<cost<<endl;
+                        }
+                    }
+                    
 
                 }
                 else if(old->second.second>cost){
                     closed[updated]=make_pair(current,cost);
                     open.push_back(make_pair(updated,cost));
-                    showCost();                    
+                    if(verbose){
+                        showCost();    
+                        if(updated==dst){
+                            cout<< "update dst"<<endl;
+                            cout<<"cost: "<<cost<<endl;
+                        }        
+                    }        
                 }
                 
             }
@@ -89,10 +94,6 @@ void MapGraph::sortPath(){
         if(++count>20){
             break;
         }
-        // cout<<"from:"<<endl;
-        // cout<<closed[current].first;
-        // cout<<"cost:"<<endl;
-        // cout<<closed[current].second<<endl;
         current=closed[current].first;
         path[current]=true;
     }
