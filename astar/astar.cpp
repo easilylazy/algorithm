@@ -1,6 +1,6 @@
 #include <iostream>
 #include <random>
-#include "atar.h"
+#include "include/astar.h"
 
 MapGraph::MapGraph(int size){
     map_size=size;

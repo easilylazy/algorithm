@@ -1,6 +1,6 @@
 #include<iostream>
 #include<ctime>
-#include "atar.h"
+#include "include/astar.h"
 using namespace std;
 
 int main(void){
