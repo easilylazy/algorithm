@@ -123,11 +123,17 @@ public:
     void siftDown_min(int i,int end);
     void delete_min();
     int extract_min();
+    void add_min(NodeType n);
 };
 
 SortHeap::SortHeap(bool MinRoot)
 {
     
+}
+void SortHeap::add_min(NodeType n){
+    arr.push_back(n);
+    size++;
+    siftUp_min(size-1);
 }
 void SortHeap::delete_min(){
     this->swap(root_index,size-1);
