@@ -126,7 +126,9 @@ public:
     SortHeap(bool MinRoot=true);
     SortHeap(int arr[],int size,bool MinRoot=true);
     // ~SortHeap();
-    void heapify();
+    void heapify(int length);
+    void heapSort();
+    void siftDown(int i);
 };
 
 SortHeap::SortHeap(bool MinRoot)
@@ -135,23 +137,35 @@ SortHeap::SortHeap(bool MinRoot)
     
 SortHeap::SortHeap(int arr[],int size,bool MinRoot):Heap(arr,size){
 }
-void SortHeap::heapify(){
-    for(int i=0;i<getSize();i++){
-        int p_i=parent_index(i);
-        if(parent_index(i)==root_index){
-            continue;
-        }
-        while(*node(i)>*node(p_i)){
-            int temp=*node(i);
-            *node(i)=*node(parent_index(i));
-            *node(parent_index(i))=temp;
-            if(p_i==root_index){
-                break;
-            }
-            i=p_i;
-            p_i=parent_index(i);
-        }
+void SortHeap::heapSort(){
+    heapify(getSize());
+    // swap first and last
+
+    int end=getSize();
+
+
+
+}
+void SortHeap::heapify(int length){
+    for(int i=0;i<length;i++){
+        siftDown(i);
     } 
+}
+void SortHeap::siftDown(int i){
+    int p_i=parent_index(i);
+    if(p_i==root_index){
+        return;
+    }
+    while(*node(i)>*node(p_i)){
+        int temp=*node(i);
+        *node(i)=*node(p_i);
+        *node(p_i)=temp;
+        if(p_i==root_index){
+            break;
+        }
+        i=p_i;
+        p_i=parent_index(i);
+    }
 }
 
 
