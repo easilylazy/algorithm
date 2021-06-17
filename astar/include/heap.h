@@ -8,12 +8,13 @@ typedef pair<int,DataType> NodeType;
 class Heap{
 private:
     // int *pArray;
-    vector<NodeType> arr; 
     //*pArray;
     // unique_ptr<int> pTest;
 public:
     int size=10;
     int root_index=0;
+    vector<NodeType> arr; 
+
     Heap(int size=10);
     Heap(int arr[],int size);
     // virtual ~Heap();
@@ -132,9 +133,9 @@ void SortHeap::delete_min(){
     this->swap(root_index,size-1);
     size--;
     siftDown_min(root_index,size);
+    arr.pop_back();
 }
-int SortHeap::extract_min()
-{
+int SortHeap::extract_min(){
     return node_value(root_index);
 }
     
@@ -152,9 +153,6 @@ void SortHeap::heapSort(){
         cout<<*this<<endl;
         end--;
     }
-
-
-
 }
 void SortHeap::heapify(int length){
     for(int i=0;i<length;i++){
@@ -231,7 +229,7 @@ void SortHeap::siftDown_min(int i,int end){
     }
     if(toSwap!=0){
         this->swap(i,toSwap);
-        siftDown(toSwap,end);
+        siftDown_min(toSwap,end);
     }
 }
 
