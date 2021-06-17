@@ -36,5 +36,78 @@ TODO:
 - 更快捷找到各点的路径导航
 
 #### heap  
+``` cpp
+#include<iostream>
+#include "include/heap.h"
+using namespace std;
+int main(void){
+    SortHeap foo;
+    foo.add_min(NodeType(3,5));
+    foo.add_min(NodeType(9,5));
+    foo.add_min(NodeType(2,5));
+    foo.add_min(NodeType(4,5));
+    cout<<foo<<endl;
+    while(foo.size>0){
+        cout<<foo.extract_min()<<endl;
+        foo.delete_min();
+    }
+}
+
+```
+output 
+```
+ 0 1 2 3
+ 2 4 3 9
+         2
+         4         3
+       9
+2
+3
+4
+9
+```
 
 ![heap](astar\ref\Heapsort-example.gif)
+
+![heapsort](astar\res\heapSort.png)
+#### 性能比较
+
+使用heap减少了对最小值的挑选，但是在整堆过程也有损耗，因此效果并没有想象中好
+
+``` cpp
+#include<iostream>
+#include<ctime>
+#include "include/astar.h"
+using namespace std;
+int main(void){
+
+    int size=99;
+    MapGraph randomMap(size);
+    time_t time_s;
+    
+    time_s=clock();
+    randomMap.astar();
+    cout<<"INIT cost " << (double )(clock() - time_s) <<" ms"<<endl;
+    randomMap=MapGraph(size);
+    time_s=clock();
+    randomMap.astar_heap();
+    cout<<"HEAP cost " << (double )(clock() - time_s) <<" ms"<<endl;
+    randomMap=MapGraph(size);
+    time_s=clock();
+    randomMap.astar();
+    cout<<"INIT cost " << (double )(clock() - time_s) <<" ms"<<endl;
+    randomMap=MapGraph(size);
+    time_s=clock();
+    randomMap.astar_heap();
+    cout<<"HEAP cost " << (double )(clock() - time_s) <<" ms"<<endl;
+    return 0;
+}
+```
+
+output
+``` 
+INIT cost 30 ms
+HEAP cost 31 ms
+INIT cost 245 ms
+HEAP cost 235 ms
+```
