@@ -9,9 +9,13 @@ private:
 public:
     Heap(int size=10);
     ~Heap();
-    int parent(int i);
-    int left_child(int i);
-    int right_child(int i);
+    int* node(int i);
+    int parent_index(int i);
+    int* parent(int i);
+    int left_child_index(int i);
+    int* left_child(int i);
+    int right_child_index(int i);
+    int* right_child(int i);
     int* children(int i);
     friend std::ostream &operator <<(std::ostream & os, const Heap &h);
     
@@ -36,17 +40,42 @@ Heap::~Heap(){
         pArray=NULL;
     }
 }
-
-int Heap::parent(int i){
+int* Heap::node(int i){
+    if(i<=0||i>=size){
+        return pArray;
+    }
+    return pArray+i;
+}
+int* Heap::parent(int i){
+    return pArray+parent_index(i);
+}
+int* Heap::right_child(int i){
+    return pArray+right_child_index(i);
+}
+int* Heap::left_child(int i){
+    return pArray+left_child_index(i);
+}
+int Heap::parent_index(int i){
+    if(i<=0||i>=size){
+        return 0;
+    }
     return floor((i-1)/2);
 }
 
-int Heap::left_child(int i){
-    return 2*i+1;
+int Heap::left_child_index(int i){
+    int lc=2*i+1;
+    if(lc<=0||lc>=size){
+        return 0;
+    }
+    return lc;
 }
 
-int Heap::right_child(int i){
-    return 2*i+2;
+int Heap::right_child_index(int i){
+    int rc=2*i+2;
+    if(rc<=0||rc>=size){
+        return 0;
+    }
+    return rc;
 }
 
 class SortHeap : public Heap
