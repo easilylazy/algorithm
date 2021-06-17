@@ -15,7 +15,7 @@ public:
     int root_index=0;
     vector<NodeType> arr; 
 
-    Heap(int size=10);
+    Heap(int size=0);
     Heap(int arr[],int size);
     // virtual ~Heap();
     void swap(int i,int j);
@@ -166,10 +166,10 @@ void SortHeap::heapify(int length){
     } 
 }
 void SortHeap::siftUp(int i){
-    int p_i=parent_index(i);
-    if(p_i==root_index){
+    if(i==root_index){
         return;
     }
+    int p_i=parent_index(i);
     while(node_value(i)>node_value(p_i)){
         this->swap(i,p_i);
         if(p_i==root_index){
@@ -180,10 +180,10 @@ void SortHeap::siftUp(int i){
     }
 }
 void SortHeap::siftUp_min(int i){
-    int p_i=parent_index(i);
-    if(p_i==root_index){
+    if(i==root_index){
         return;
     }
+    int p_i=parent_index(i);
     while(node_value(i)<node_value(p_i)){
         this->swap(i,p_i);
         if(p_i==root_index){
