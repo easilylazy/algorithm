@@ -17,4 +17,24 @@ TODO:
 - 增加障碍方格
 - 在把节点加入OPEN（待探索节点时），按序存放，便于之后寻找当前OPEN中的最小路径
     - 目前可用更好的数据结构：堆
+    > The heap is one maximally efficient implementation of an abstract data type called a priority queue. A heap is a useful data structure when it is necessary to repeatedly remove the object with the highest (or lowest) priority.
+     --[wiki](https://en.wikipedia.org/wiki/Heap_%28data_structure%29)    
+
+    原本通过遍历存放OPEN的map，记录找到的最小cost
+    ```cpp
+            for(int i=1;i<open.size();i++){
+            auto item=open[i];
+            if(item.second<minCost){
+                minCost=item.second;
+                current=item.first;
+                minSite=i;
+            }
+        }
+
+
+    ```
 - 更快捷找到各点的路径导航
+
+#### heap  
+
+![heap](astar\ref\Heapsort-example.gif)
