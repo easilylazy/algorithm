@@ -96,25 +96,16 @@ int* Heap::left_child(int i){
     return pArray+left_child_index(i);
 }
 int Heap::parent_index(int i){
-    if(i<=0||i>=size){
-        return 0;
-    }
     return floor((i-1)/2);
 }
 
 int Heap::left_child_index(int i){
     int lc=2*i+1;
-    if(lc<=0||lc>=size){
-        return 0;
-    }
     return lc;
 }
 
 int Heap::right_child_index(int i){
     int rc=2*i+2;
-    if(rc<=0||rc>=size){
-        return 0;
-    }
     return rc;
 }
 
@@ -128,7 +119,8 @@ public:
     // ~SortHeap();
     void heapify(int length);
     void heapSort();
-    void siftDown(int i);
+    void siftUp(int i);
+    void siftDown(int i,int end);
 };
 
 SortHeap::SortHeap(bool MinRoot)
@@ -139,32 +131,64 @@ SortHeap::SortHeap(int arr[],int size,bool MinRoot):Heap(arr,size){
 }
 void SortHeap::heapSort(){
     heapify(getSize());
-    // swap first and last
 
     int end=getSize();
+
+    while(end>root_index){
+        cout<<end<<endl;
+        cout<<*this<<endl;
+    // swap first and last
+        swap(*node(root_index),*node(end-1));
+        cout<<"swap"<<endl;
+
+        cout<<*this<<endl;
+
+        siftDown(0,end-1);
+        end--;
+    }
 
 
 
 }
 void SortHeap::heapify(int length){
     for(int i=0;i<length;i++){
-        siftDown(i);
+        siftUp(i);
     } 
 }
-void SortHeap::siftDown(int i){
+void SortHeap::siftUp(int i){
     int p_i=parent_index(i);
     if(p_i==root_index){
         return;
     }
     while(*node(i)>*node(p_i)){
-        int temp=*node(i);
-        *node(i)=*node(p_i);
-        *node(p_i)=temp;
+        swap(*node(i),*node(p_i));
         if(p_i==root_index){
             break;
         }
         i=p_i;
         p_i=parent_index(i);
+    }
+}
+void SortHeap::siftDown(int i,int end){
+    int l_i=left_child_index(i);
+    if(l_i>=end){
+        return;
+    }
+    int toSwap=0;
+    if(*node(i)<*node(l_i)){
+        toSwap=l_i;
+    }
+    int r_i=right_child_index(i);
+    if(r_i<end){
+        if(toSwap==l_i&&*node(l_i)<*node(r_i)){
+            toSwap=r_i;
+        }else if(toSwap==0&&*node(i)<*node(r_i)){
+            toSwap=r_i;
+        }
+    }
+    if(toSwap!=0){
+        swap(*node(i),*node(toSwap));
+        siftDown(toSwap,end);
     }
 }
 
