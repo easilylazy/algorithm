@@ -1,39 +1,48 @@
 # include<iostream>
 # include<cmath>
 # include<memory>
+# include<vector>
 using namespace std;
-
+typedef int DataType;
+typedef pair<int,DataType> NodeType;
 class Heap{
 private:
-    int size=10;
-    int *pArray;
+    // int *pArray;
+    vector<NodeType> arr; 
+    //*pArray;
     // unique_ptr<int> pTest;
 public:
+    int size=10;
     int root_index=0;
     Heap(int size=10);
     Heap(int arr[],int size);
-    virtual ~Heap();
+    // virtual ~Heap();
+    void swap(int i,int j);
     int getSize();
-    int* node(int i);
+    int node_value(int i)const;
     int parent_index(int i);
-    int* parent(int i);
-    bool parent(int i,int change);
     int left_child_index(int i);
-    int* left_child(int i);
     int right_child_index(int i);
-    int* right_child(int i);
-    int* children(int i);
+    void pop_back();
     friend std::ostream &operator <<(std::ostream & os, const Heap &h);
     
 };
+void Heap::swap(int i,int j){
+    NodeType temp;
+    temp=arr[i];
+    arr[i]=arr[j];
+    arr[j]=temp;
+}
+void Heap::pop_back(){
 
+}
 std::ostream &operator <<(std::ostream & os, const Heap & h){
         for(int i=0;i<h.size;i++){
             os<<" "<<i;
         }
         cout<<endl;
         for(int i=0;i<h.size;i++){
-            os<<" "<<*(h.pArray+i);
+            os<<" "<<h.node_value(i);
         }
         cout<<endl;
 
@@ -43,7 +52,7 @@ std::ostream &operator <<(std::ostream & os, const Heap & h){
             cout<<" ";
 
             }
-            os<<" "<<*(h.pArray+i);
+            os<<" "<<(h.node_value(i));
             if(int(log2(i+2))>thresh){
                 cout<<endl;
                 thresh++;
@@ -53,48 +62,36 @@ std::ostream &operator <<(std::ostream & os, const Heap & h){
 }   
 Heap::Heap(int arr[],int size){
     this->size=size;
-    pArray = new int(size);
+    this->arr = vector<NodeType>(size);
     for(int i=0;i<size;i++){
-        *(pArray+i)=arr[i];
+        this->arr[i].first=arr[i];
     }    
 }
 Heap::Heap(int size){
     this->size=size;
-    pArray = new int(size);
+    this->arr = vector<NodeType>(size);
     for(int i=0;i<size;i++){
-        *(pArray+i)=i;
+        this->arr[i].first=i;
     }    
 }
-Heap::~Heap(){
-    cout<<" destuction of Heap()"<<endl;
-    if(pArray){
-        delete []pArray;
-        pArray=NULL;
-    }
-}
+// Heap::~Heap(){
+//     cout<<" destuction of Heap()"<<endl;
+//     if(pArray){
+//         delete []pArray;
+//         pArray=NULL;
+//     }
+// }
 int Heap::getSize(){
     return size;
 }
-int* Heap::node(int i){
-    if(i<=0||i>=size){
-        return pArray;
+int Heap::node_value(int i)const{
+    if(i<0||i>=size){
+        return -1;
     }
-    return pArray+i;
-}
-int* Heap::parent(int i){
-    return pArray+parent_index(i);
-}
-bool Heap::parent(int i,int change){
-    *parent(i)=change;
-    return true;
+    return (arr[i].first);
 }
 
-int* Heap::right_child(int i){
-    return pArray+right_child_index(i);
-}
-int* Heap::left_child(int i){
-    return pArray+left_child_index(i);
-}
+
 int Heap::parent_index(int i){
     return floor((i-1)/2);
 }
@@ -120,11 +117,25 @@ public:
     void heapify(int length);
     void heapSort();
     void siftUp(int i);
+    void siftUp_min(int i);
     void siftDown(int i,int end);
+    void siftDown_min(int i,int end);
+    void delete_min();
+    int extract_min();
 };
 
 SortHeap::SortHeap(bool MinRoot)
 {
+    
+}
+void SortHeap::delete_min(){
+    this->swap(root_index,size-1);
+    size--;
+    siftDown_min(root_index,size);
+}
+int SortHeap::extract_min()
+{
+    return node_value(root_index);
 }
     
 SortHeap::SortHeap(int arr[],int size,bool MinRoot):Heap(arr,size){
@@ -135,15 +146,10 @@ void SortHeap::heapSort(){
     int end=getSize();
 
     while(end>root_index){
-        cout<<end<<endl;
-        cout<<*this<<endl;
-    // swap first and last
-        swap(*node(root_index),*node(end-1));
-        cout<<"swap"<<endl;
-
-        cout<<*this<<endl;
-
+        // swap first and last
+        this->swap(root_index,end-1);
         siftDown(0,end-1);
+        cout<<*this<<endl;
         end--;
     }
 
@@ -160,8 +166,22 @@ void SortHeap::siftUp(int i){
     if(p_i==root_index){
         return;
     }
-    while(*node(i)>*node(p_i)){
-        swap(*node(i),*node(p_i));
+    while(node_value(i)>node_value(p_i)){
+        this->swap(i,p_i);
+        if(p_i==root_index){
+            break;
+        }
+        i=p_i;
+        p_i=parent_index(i);
+    }
+}
+void SortHeap::siftUp_min(int i){
+    int p_i=parent_index(i);
+    if(p_i==root_index){
+        return;
+    }
+    while(node_value(i)<node_value(p_i)){
+        this->swap(i,p_i);
         if(p_i==root_index){
             break;
         }
@@ -175,19 +195,42 @@ void SortHeap::siftDown(int i,int end){
         return;
     }
     int toSwap=0;
-    if(*node(i)<*node(l_i)){
+    if(node_value(i)<node_value(l_i)){
         toSwap=l_i;
     }
     int r_i=right_child_index(i);
     if(r_i<end){
-        if(toSwap==l_i&&*node(l_i)<*node(r_i)){
+        if(toSwap==l_i&&node_value(l_i)<node_value(r_i)){
             toSwap=r_i;
-        }else if(toSwap==0&&*node(i)<*node(r_i)){
+        }else if(toSwap==0&&node_value(i)<node_value(r_i)){
             toSwap=r_i;
         }
     }
     if(toSwap!=0){
-        swap(*node(i),*node(toSwap));
+        this->swap(i,toSwap);
+        siftDown(toSwap,end);
+    }
+}
+
+void SortHeap::siftDown_min(int i,int end){
+    int l_i=left_child_index(i);
+    if(l_i>=end){
+        return;
+    }
+    int toSwap=0;
+    if(node_value(i)>node_value(l_i)){
+        toSwap=l_i;
+    }
+    int r_i=right_child_index(i);
+    if(r_i<end){
+        if(toSwap==l_i&&node_value(l_i)>node_value(r_i)){
+            toSwap=r_i;
+        }else if(toSwap==0&&node_value(i)>node_value(r_i)){
+            toSwap=r_i;
+        }
+    }
+    if(toSwap!=0){
+        this->swap(i,toSwap);
         siftDown(toSwap,end);
     }
 }
