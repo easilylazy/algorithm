@@ -6,11 +6,10 @@
 # include<vector>
 using namespace std;
 
-// 改动一：增加函数模板的声明——而这又需要先声明类模板
 template<typename T1> class Heap;
 template <typename T1>
 std::ostream &operator<<(std::ostream & os, const Heap<T1> &h);
-// T1 should be 
+// T1 should be pair, with first can be compared
 template<typename T1>
 class Heap{
 public:
@@ -111,9 +110,6 @@ template<typename T1>
 Heap<T1>::Heap(int size){
     this->size=size;
     this->content = vector<T1>(size);
-    for(int i=0;i<size;i++){
-        this->content[i].first=i;
-    }    
 }
 template<typename T1>
 int Heap<T1>::getSize(){
