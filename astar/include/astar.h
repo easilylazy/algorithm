@@ -9,7 +9,7 @@
 #define DIRECTION_MAX 4
 using namespace std;
 typedef Site DataType;
-typedef pair<DataType,int> NodeType;
+typedef pair<int,DataType> NodeType;
 class MapGraph{
 private:
     int cost_min=0;

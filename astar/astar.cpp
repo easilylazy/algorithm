@@ -23,7 +23,7 @@ MapGraph::MapGraph(int size){
 }
 void MapGraph::astar_heap(){
     // first: push src 
-    OPEN.add_min(NodeType(src,0));
+    OPEN.add_min(NodeType(0,src));
     // open.push_back(make_pair(src,0));
     closed[src]=make_pair(src,0);
 
@@ -34,8 +34,8 @@ void MapGraph::astar_heap(){
     while(OPEN.getSize()>0){
         // find the smallest in the open
         NodeType current_min=OPEN.extract_min();
-        minCost=current_min.second;
-        current=current_min.first;
+        minCost=current_min.first;
+        current=current_min.second;
         OPEN.delete_min();
         // visit current minCost
         // find its neighboor and update the cost
@@ -49,7 +49,7 @@ void MapGraph::astar_heap(){
 
                 if(old==closed.end()){
                     closed[updated]=make_pair(current,cost);
-                    OPEN.add_min(make_pair(updated,cost));
+                    OPEN.add_min(make_pair(cost,updated));
                     if(verbose){
                         showCost();
                         if(updated==dst){
@@ -62,7 +62,7 @@ void MapGraph::astar_heap(){
                 }
                 else if(old->second.second>cost){
                     closed[updated]=make_pair(current,cost);
-                    OPEN.add_min(make_pair(updated,cost));
+                    OPEN.add_min(make_pair(cost,updated));
                     if(verbose){
                         showCost();    
                         if(updated==dst){

@@ -10,7 +10,7 @@ using namespace std;
 template<typename T1> class Heap;
 template <typename T1>
 std::ostream &operator<<(std::ostream & os, const Heap<T1> &h);
-
+// T1 should be 
 template<typename T1>
 class Heap{
 public:
@@ -104,7 +104,7 @@ Heap<T1>::Heap(T1 content[],int size){
     this->size=size;
     this->content = vector<T1>(size);
     for(int i=0;i<size;i++){
-        this->content[i].second=content[i];
+        this->content[i].first=content[i];
     }    
 }
 template<typename T1> 
@@ -112,7 +112,7 @@ Heap<T1>::Heap(int size){
     this->size=size;
     this->content = vector<T1>(size);
     for(int i=0;i<size;i++){
-        this->content[i].second=i;
+        this->content[i].first=i;
     }    
 }
 template<typename T1>
@@ -124,7 +124,7 @@ int Heap<T1>::node_value(int i)const{
     if(i<0||i>=size){
         return -1;
     }
-    return (content[i].second);
+    return (content[i].first);
 }
 
 template<typename T1>
@@ -177,7 +177,7 @@ void SortHeap<T1>::heapSort(){
     int end=getSize();
 
     while(end>root_index){
-        // swap second and last
+        // swap first and last
         this->swap(root_index,end-1);
         siftDown(0,end-1);
         cout<<*this<<endl;
