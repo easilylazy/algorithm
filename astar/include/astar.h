@@ -24,7 +24,7 @@ private:
 
     map<Site,pair<Site,int>> closed;// smallest cost
     vector<pair<Site,int>> open;
-    SortHeap OPEN;
+    SortHeap<int> OPEN;
 
     map<Site,bool> path;
 
