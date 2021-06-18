@@ -3,11 +3,13 @@
 #include <vector>
 #include <map>
 #include <stack>
-// #include "site.h"
+#include "site.h"
 #include "heap.h"
 
 #define DIRECTION_MAX 4
 using namespace std;
+typedef Site DataType;
+typedef pair<DataType,int> NodeType;
 class MapGraph{
 private:
     int cost_min=0;
@@ -24,7 +26,7 @@ private:
 
     map<Site,pair<Site,int>> closed;// smallest cost
     vector<pair<Site,int>> open;
-    SortHeap<int> OPEN;
+    SortHeap<NodeType> OPEN;
 
     map<Site,bool> path;
 

@@ -4,29 +4,22 @@
 # include<cmath>
 # include<memory>
 # include<vector>
-# include"site.h"
 using namespace std;
-typedef Site DataType;
-typedef pair<DataType,int> NodeType;
+
 // 改动一：增加函数模板的声明——而这又需要先声明类模板
 template<typename T1> class Heap;
 template <typename T1>
 std::ostream &operator<<(std::ostream & os, const Heap<T1> &h);
 
-template<typename T1>//, typename T2>
+template<typename T1>
 class Heap{
-private:
-    // int *pArray;
-    //*pArray;
-    // unique_ptr<int> pTest;
 public:
-    int size=10;
+    int size=0;
     int root_index=0;
-    vector<NodeType> arr; 
+    vector<T1> content;
 
     Heap(int size=0);
-    Heap(int arr[],int size);
-    // Heap(T node,int size=0);
+    Heap(T1 content[],int size=0);
     // virtual ~Heap();
     void swap(int i,int j);
     int getSize();
@@ -44,7 +37,7 @@ class SortHeap : public Heap<T1>
 private:
     bool MinRoot=true;
 public:
-    using Heap<T1>::arr;  
+    using Heap<T1>::content;  
     using Heap<T1>::size;  
     using Heap<T1>::root_index;  
     using Heap<T1>::node_value;  
@@ -54,7 +47,7 @@ public:
     using Heap<T1>::right_child_index;  
 
     SortHeap(bool MinRoot=true);
-    SortHeap(int arr[],int size,bool MinRoot=true);
+    SortHeap(int content[],int size,bool MinRoot=true);
     // ~SortHeap();
     void heapify(int length);
     void heapSort();
@@ -64,17 +57,18 @@ public:
     void siftDown_min(int i,int end);
     void delete_min();
     int extract_min_value();
-    NodeType extract_min();
-
-    void add_min(NodeType n);
+    // NodeType extract_min();
+    T1 extract_min();
+    void add_min(T1 n);
 };
 
 template<typename T1>
 void Heap<T1>::swap(int i,int j){
-    NodeType temp;
-    temp=arr[i];
-    arr[i]=arr[j];
-    arr[j]=temp;
+    
+    T1 temp;
+    temp=content[i];
+    content[i]=content[j];
+    content[j]=temp;
 }
 template<typename T1>
 void Heap<T1>::pop_back(){
@@ -106,28 +100,21 @@ std::ostream &operator<<(std::ostream & os, const Heap<T1> & h){
         return os;
 }   
 template<typename T1> 
-Heap<T1>::Heap(int arr[],int size){
+Heap<T1>::Heap(T1 content[],int size){
     this->size=size;
-    this->arr = vector<NodeType>(size);
+    this->content = vector<T1>(size);
     for(int i=0;i<size;i++){
-        this->arr[i].second=arr[i];
+        this->content[i].second=content[i];
     }    
 }
 template<typename T1> 
 Heap<T1>::Heap(int size){
     this->size=size;
-    this->arr = vector<NodeType>(size);
+    this->content = vector<T1>(size);
     for(int i=0;i<size;i++){
-        this->arr[i].second=i;
+        this->content[i].second=i;
     }    
 }
-// Heap<T1>::~Heap(){
-//     cout<<" destuction of Heap()"<<endl;
-//     if(pArray){
-//         delete []pArray;
-//         pArray=NULL;
-//     }
-// }
 template<typename T1>
 int Heap<T1>::getSize(){
     return size;
@@ -137,7 +124,7 @@ int Heap<T1>::node_value(int i)const{
     if(i<0||i>=size){
         return -1;
     }
-    return (arr[i].second);
+    return (content[i].second);
 }
 
 template<typename T1>
@@ -160,8 +147,8 @@ SortHeap<T1>::SortHeap(bool MinRoot)
     
 }
 template<typename T1>
-void SortHeap<T1>::add_min(NodeType n){
-    arr.push_back(n);
+void SortHeap<T1>::add_min(T1 n){
+    content.push_back(n);
     size++;
     siftUp_min(size-1);
 }
@@ -170,18 +157,18 @@ void SortHeap<T1>::delete_min(){
     this->swap(root_index,size-1);
     size--;
     siftDown_min(root_index,size);
-    arr.pop_back();
+    content.pop_back();
 }
 template<typename T1>
-NodeType SortHeap<T1>::extract_min(){
-    return arr[root_index];
+T1 SortHeap<T1>::extract_min(){
+    return content[root_index];
 }
 template<typename T1>
 int SortHeap<T1>::extract_min_value(){
     return node_value(root_index);
 }
 template<typename T1>    
-SortHeap<T1>::SortHeap(int arr[],int size,bool MinRoot):Heap<T1>(arr,size){
+SortHeap<T1>::SortHeap(int content[],int size,bool MinRoot):Heap<T1>(content,size){
 }
 template<typename T1>
 void SortHeap<T1>::heapSort(){
