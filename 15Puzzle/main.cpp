@@ -7,9 +7,15 @@ using namespace std;
 
 
 int main(void){
-    Board demo(4);
+    Board demo(3);
     demo.print();
-    demo.shuffle(29);
+    demo.shuffle(5);
+    demo.print();
+
+    cout<<"differ:"<<demo.difference(demo.board)<<endl;
+    
+    demo.simple();
+    return 0;
     // demo.possible_direction();
     // demo.exec_direction(Up);
     // demo.print();

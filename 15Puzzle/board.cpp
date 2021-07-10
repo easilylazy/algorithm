@@ -156,9 +156,36 @@ cost_type Board::difference(board_type present){
     return difference;
 }
 void Board::simple(){
+
+
+    open_simple_type a(start,vector<int>{2,3,5});
+    open_simple_type b(start,vector<int>{2,3,8});
+    open_simple_type c(start,vector<int>{2,3,3});
+    priority_queue<open_simple_type,vector<open_simple_type>,greater<open_simple_type>> d;
+    d.push(b);
+    d.push(c);
+    d.push(a);
+    while (!d.empty())
+    {
+        for(auto i:d.top().costs){
+            cout << i << ' ';
+        }
+        cout<<endl;
+        d.pop();
+    }
+    cout << endl;
+
+    return ;
+
+
+
     // queue<info_type> open;
     queue<pair<board_type,vector<int>>> open;
     vector<int> depth(3);
+    vector<int> costs(3);// depth;heuristic;total
+    int heuristic=difference(start);
+    costs={0,heuristic,heuristic};
+    open.push(make_pair(start,costs));
     // heuristic_type closed;
     board_type present;
     Site temp_space;

@@ -13,6 +13,17 @@ typedef int cost_type;
 typedef pair<board_type,cost_type> info_type;
 typedef pair<board_type,direct_type> record_type;
 typedef pair<record_type,cost_type> heuristic_type;
+struct open_simple_type 
+{
+    board_type board;
+    vector<int> costs;
+
+    open_simple_type(board_type board,vector<int> costs) {this->board=board;this->costs=costs;}
+    bool operator>(const open_simple_type& a) const
+    {
+        return costs[2] > a.costs[2]; //小顶堆
+    }
+};
 enum Direction{
     Up,Down,Left,Right,
 };
