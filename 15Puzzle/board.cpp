@@ -2,6 +2,7 @@
 # include<stack>
 Board::Board(int size=4)
 {
+    this->size=size;
     size_max=size-1;
     size_min=0;
     board = vector<vector<int>>(size);
@@ -142,6 +143,64 @@ void Board::path(){
         confirm_path.pop();
     }
     print(target);
+}
+cost_type Board::difference(board_type present){
+    cost_type difference=0;
+    for(int row=0;row<size;row++){
+        for(int col=0;col<size;col++){
+            if(target[row][col]!=present[row][col]){
+                difference++;
+            }
+        }
+    }  
+    return difference;
+}
+void Board::simple(){
+    // queue<info_type> open;
+    queue<pair<board_type,vector<int>>> open;
+    vector<int> depth(3);
+    // heuristic_type closed;
+    board_type present;
+    Site temp_space;
+    int cnt=0;
+    while(!open.empty()){
+        // cnt++;
+        // if(cnt>30){
+        //     break;
+        // }
+        board=open.front().first;
+        depth =open.front().second;
+        if(board==target){
+            cout<<"achieve target"<<endl;
+            break;
+        }
+        present=board;
+        // for specific state 
+        temp_space=locate_space(board);
+        space=temp_space;
+        possible_direction();
+
+        for(int i=0;i<4;i++){
+            
+            if(possible_direct[i]){
+                board=present;
+                temp_space=space;
+                exec_direction(board,i,temp_space);
+                records[make_pair(present,i)]=board;
+                // closed_simple[make_pair()]
+                // add new appearance
+                if(visited.find(board)==visited.end()){
+                    open.push(make_pair(board,depth));
+                }
+                if(useful.find(board)==useful.end()){
+                    useful[board]=make_pair(present,i);
+                }
+            }
+        }
+        visited[board]=true;
+        open.pop();
+        
+    }
 }
 void Board::BFS(){
     queue<board_type> open;

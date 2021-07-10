@@ -8,7 +8,11 @@
 using namespace std;
 typedef vector<vector<int>> board_type;
 typedef int direct_type;
+typedef int cost_type;
+// typedef int total_type;// first: depth second: heuristic
+typedef pair<board_type,cost_type> info_type;
 typedef pair<board_type,direct_type> record_type;
+typedef pair<record_type,cost_type> heuristic_type;
 enum Direction{
     Up,Down,Left,Right,
 };
@@ -38,9 +42,11 @@ public:
     vector<vector<int>> board;
     vector<vector<int>> target;
     vector<vector<int>> start;
+    map<heuristic_type,board_type> closed_simple;
     map<record_type,board_type> records;
     map<board_type,record_type> useful;
     map<board_type,bool> visited; 
+    int size;
     int size_max;
     int size_min;
     bool possible_direct[4];
@@ -58,6 +64,8 @@ public:
     void shuffle(int steps=10);
     void path();
     void BFS();
+    void simple();// heuristic: h(x)=difference
+    cost_type difference(board_type present);
     ~Board();
 
 };
