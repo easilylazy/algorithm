@@ -73,6 +73,7 @@ public:
     void exec_direction(board_type &board,int direction,Site &space);
     void exec_direction(int direction,Site &space);
     void shuffle(int steps=10);
+    void modStart(board_type board);
     void path();
     void BFS();
     void simple();// heuristic: h(x)=difference

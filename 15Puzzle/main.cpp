@@ -7,22 +7,29 @@ using namespace std;
 
 
 int main(void){
+    int steps=30;
     Board demo(3);
     demo.print();
-    demo.shuffle(5);
+    demo.shuffle(steps);
+
+    board_type record=demo.board;
     demo.print();
 
     cout<<"differ:"<<demo.difference(demo.board)<<endl;
     
     demo.simple();
-    return 0;
+    demo.path();
+
+    // return 0;
     // demo.possible_direction();
     // demo.exec_direction(Up);
     // demo.print();
     // demo.possible_direction();
+    Board demo2(3);
+    demo2.modStart(record);
+    demo2.BFS();
 
-    demo.BFS();
-    demo.path();
+    demo2.path();
     // demo.display();
     return 0;
 

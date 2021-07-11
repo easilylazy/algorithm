@@ -116,6 +116,10 @@ void Board::shuffle(int steps){
     }
     start=board;
 }
+void Board::modStart(board_type board){
+    this->board=board;
+    start=board;
+}
 void Board::path(){
     board=target;
     record_type next;
@@ -157,46 +161,26 @@ cost_type Board::difference(board_type present){
 }
 void Board::simple(){
 
+    priority_queue<open_simple_type,vector<open_simple_type>,greater<open_simple_type>> open;
 
-    open_simple_type a(start,vector<int>{2,3,5});
-    open_simple_type b(start,vector<int>{2,3,8});
-    open_simple_type c(start,vector<int>{2,3,3});
-    priority_queue<open_simple_type,vector<open_simple_type>,greater<open_simple_type>> d;
-    d.push(b);
-    d.push(c);
-    d.push(a);
-    while (!d.empty())
-    {
-        for(auto i:d.top().costs){
-            cout << i << ' ';
-        }
-        cout<<endl;
-        d.pop();
-    }
-    cout << endl;
-
-    return ;
-
-
-
-    // queue<info_type> open;
-    queue<pair<board_type,vector<int>>> open;
-    vector<int> depth(3);
+    int depth;
     vector<int> costs(3);// depth;heuristic;total
     int heuristic=difference(start);
     costs={0,heuristic,heuristic};
-    open.push(make_pair(start,costs));
+    open.push(open_simple_type(start,costs));
     // heuristic_type closed;
     board_type present;
     Site temp_space;
     int cnt=0;
     while(!open.empty()){
-        // cnt++;
-        // if(cnt>30){
-        //     break;
-        // }
-        board=open.front().first;
-        depth =open.front().second;
+        cnt++;
+        if(cnt>1000){
+            cout<<"over steps"<<endl;
+            break;
+        }
+        board =open.top().board;
+        depth =open.top().costs[0];
+        
         if(board==target){
             cout<<"achieve target"<<endl;
             break;
@@ -207,6 +191,13 @@ void Board::simple(){
         space=temp_space;
         possible_direction();
 
+        if(VERBOSE){
+            cout<<"----------optimize-------"<<endl;
+            print(board);
+            cout<<endl;
+            cout<<"d: "<<depth<<" h: "<<open.top().costs[1]<<" loss"<< open.top().costs[2]<<endl;
+        }
+        open.pop();
         for(int i=0;i<4;i++){
             
             if(possible_direct[i]){
@@ -217,15 +208,24 @@ void Board::simple(){
                 // closed_simple[make_pair()]
                 // add new appearance
                 if(visited.find(board)==visited.end()){
-                    open.push(make_pair(board,depth));
+                    
+                    heuristic=difference(board);
+                    costs={depth+1,heuristic,depth+1+heuristic};
+                    open.push(open_simple_type(board,costs));
+                    if(VERBOSE){
+                        cout<<"----------update-------"<<endl;
+                        print(board);
+                        cout<<endl;
+                        cout<<"d: "<<costs[0]<<" h: "<<costs[1]<<" loss"<< costs[2]<<endl;
+                    }       
+                    
                 }
                 if(useful.find(board)==useful.end()){
                     useful[board]=make_pair(present,i);
                 }
             }
         }
-        visited[board]=true;
-        open.pop();
+        visited[present]=true;
         
     }
 }
