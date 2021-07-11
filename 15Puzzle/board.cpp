@@ -305,15 +305,10 @@ void Board::BFS(){
     open.push(start);
     board_type present;
     Site temp_space;
-    int cnt=0;
     while(!open.empty()){
-        // cnt++;
-        // if(cnt>30){
-        //     break;
-        // }
         board=open.front();
         if(board==target){
-            cout<<"achieve target"<<endl;
+            cout<<"BFS achieve target"<<endl;
             break;
         }
         present=board;

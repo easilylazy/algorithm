@@ -1,6 +1,6 @@
 #include <iostream>
 #include <random>
-#include "atar.h"
+#include "include/astar.h"
 
 MapGraph::MapGraph(int size){
     map_size=size;
@@ -11,7 +11,7 @@ MapGraph::MapGraph(int size){
         graph[i]=vector<int>(size);
         for(int j=0;j<size;j++){
             graph[i][j]=rand()%(cost_max-cost_min)+cost_min;
-            cout<<graph[i][j]<<" ";
+            // cout<<graph[i][j]<<" ";
         }
         cout<<endl;
     }
@@ -20,6 +20,62 @@ MapGraph::MapGraph(int size){
     upLeft=Site(0,0);
     downRight=Site(size-1,size-1);
     
+}
+void MapGraph::astar_heap(){
+    // first: push src 
+    OPEN.add_min(NodeType(0,src));
+    // open.push_back(make_pair(src,0));
+    closed[src]=make_pair(src,0);
+
+
+    Site current;
+    int minCost;
+    int minSite;
+    while(OPEN.getSize()>0){
+        // find the smallest in the open
+        NodeType current_min=OPEN.extract_min();
+        minCost=current_min.first;
+        current=current_min.second;
+        OPEN.delete_min();
+        // visit current minCost
+        // find its neighboor and update the cost
+        Site updated;
+        int cost;
+        for(enum Direction d=Direction(DirectionMin+1);d<DirectionMax;d=Direction(d+1)){
+            updated=current.chooseDirection(d);
+            if(updated>=upLeft&&updated<=downRight){
+                cost=minCost+graph[updated.Row()][updated.Col()];
+                auto old= closed.find(updated);
+
+                if(old==closed.end()){
+                    closed[updated]=make_pair(current,cost);
+                    OPEN.add_min(make_pair(cost,updated));
+                    if(verbose){
+                        showCost();
+                        if(updated==dst){
+                            cout<< "achieve dst"<<endl;
+                            cout<<"cost: "<<cost<<endl;
+                        }
+                    }
+                    
+
+                }
+                else if(old->second.second>cost){
+                    closed[updated]=make_pair(current,cost);
+                    OPEN.add_min(make_pair(cost,updated));
+                    if(verbose){
+                        showCost();    
+                        if(updated==dst){
+                            cout<< "update dst"<<endl;
+                            cout<<"cost: "<<cost<<endl;
+                        }        
+                    }        
+                }
+                
+            }
+        }
+    }
+    sortPath();
 }
 void MapGraph::astar(){
     // first: push src 

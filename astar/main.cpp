@@ -1,12 +1,14 @@
 #include<iostream>
 #include<ctime>
-#include "atar.h"
+#include "include/astar.h"
 using namespace std;
 
 int main(void){
     MapGraph randomMap(9);
     time_t time_s=clock();
-    randomMap.astar();
+    randomMap.astar_heap();
+    // not use heap 
+    // randomMap.astar();
     cout<<"it cost " << (double )(clock() - time_s) <<" ms"<<endl;
     randomMap.showCost();
     randomMap.showPath();
