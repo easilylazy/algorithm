@@ -47,6 +47,9 @@ Site Board::locate_space(board_type board,int num){
     } 
     return Site(0,0);
 }
+int Board::locate_site(board_type board,Site x){
+    return board[x.row][x.col];
+}
 void Board::possible_direction(){
     for(int i=0;i<4;i++){
         possible_direct[i]=true;
@@ -163,19 +166,34 @@ cost_type Board::difference(board_type present){
 }
 // ② 较好的估价函数：各棋子移到目的位置所需移动距离的总和。
 cost_type Board::steps(board_type present){
-    cout<<(locate_space(present)-locate_space(target)).col<<endl;
-    cout<<(locate_space(present)-locate_space(target)).row<<endl;
     cost_type difference=0;
+
+    Site differ;
     for(int row=0;row<size;row++){
         for(int col=0;col<size;col++){
-            if(target[row][col]!=present[row][col]){
-                difference++;
-            }
+            differ=Site(row,col)-locate_space(target,present[row][col]);
+            difference+=abs(differ.col)+abs(differ.row);
         }
     }  
     return difference;
 }
 // ③ 对每一对逆转棋子乘以一个倍数。
+cost_type Board::reverse(board_type present){
+    cost_type difference=0;
+
+    Site differ;
+    for(int row=0;row<size;row++){
+        for(int col=0;col<size;col++){
+            if(target[row][col]!=present[row][col]){
+                if(locate_site(present,locate_space(target,present[row][col]))==target[row][col]){
+                    difference++;
+                }
+            }
+            
+        }
+    }  
+    return difference*reverse_rate;
+}
 // ④ 为克服仅计算棋子逆转数目策略的局限，将位置不符棋子数目的总和与
 // 3 倍棋子逆转数目相加。
 void Board::simple(){
