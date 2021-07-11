@@ -229,6 +229,77 @@ void Board::simple(){
         
     }
 }
+
+void Board::better(cost_type(Board::*h)(board_type)){
+
+    priority_queue<open_simple_type,vector<open_simple_type>,greater<open_simple_type>> open;
+
+    int depth;
+    vector<int> costs(3);// depth;heuristic;total
+    int heuristic=(this->*h)(start);
+    costs={0,heuristic,heuristic};
+    open.push(open_simple_type(start,costs));
+    // heuristic_type closed;
+    board_type present;
+    Site temp_space;
+    int cnt=0;
+    while(!open.empty()){
+        cnt++;
+        if(cnt>1000){
+            cout<<"over steps"<<endl;
+            break;
+        }
+        board =open.top().board;
+        depth =open.top().costs[0];
+        
+        if(board==target){
+            cout<<"achieve target"<<endl;
+            break;
+        }
+        present=board;
+        // for specific state 
+        temp_space=locate_space(board);
+        space=temp_space;
+        possible_direction();
+
+        if(VERBOSE){
+            cout<<"----------optimize-------"<<endl;
+            print(board);
+            cout<<endl;
+            cout<<"d: "<<depth<<" h: "<<open.top().costs[1]<<" loss"<< open.top().costs[2]<<endl;
+        }
+        open.pop();
+        for(int i=0;i<4;i++){
+            
+            if(possible_direct[i]){
+                board=present;
+                temp_space=space;
+                exec_direction(board,i,temp_space);
+                records[make_pair(present,i)]=board;
+                // closed_simple[make_pair()]
+                // add new appearance
+                if(visited.find(board)==visited.end()){
+                    
+                    heuristic=difference(board);
+                    costs={depth+1,heuristic,depth+1+heuristic};
+                    open.push(open_simple_type(board,costs));
+                    if(VERBOSE){
+                        cout<<"----------update-------"<<endl;
+                        print(board);
+                        cout<<endl;
+                        cout<<"d: "<<costs[0]<<" h: "<<costs[1]<<" loss"<< costs[2]<<endl;
+                    }       
+                    
+                }
+                if(useful.find(board)==useful.end()){
+                    useful[board]=make_pair(present,i);
+                }
+            }
+        }
+        visited[present]=true;
+        
+    }
+}
 void Board::BFS(){
     queue<board_type> open;
     open.push(start);

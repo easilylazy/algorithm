@@ -16,15 +16,12 @@ int main(void){
     demo.print();
 
     cout<<"differ:"<<demo.difference(demo.board)<<endl;
-    
-    demo.simple();
-    demo.path();
 
-    // return 0;
-    // demo.possible_direction();
-    // demo.exec_direction(Up);
-    // demo.print();
-    // demo.possible_direction();
+    cost_type (Board::*pfunc)(board_type); //声明一个和参数类型一样的函数指针  
+    pfunc =& Board::difference; //指针指向要调用的函数  
+    demo.better(pfunc);
+    demo.path();
+    
     Board demo2(3);
     demo2.modStart(record);
     demo2.BFS();

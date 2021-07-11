@@ -77,6 +77,7 @@ public:
     void path();
     void BFS();
     void simple();// heuristic: h(x)=difference
+    void better(cost_type(Board::*h)(board_type));
     cost_type difference(board_type present);
     ~Board();
 
