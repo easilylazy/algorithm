@@ -75,7 +75,7 @@ public:
     string info[4]={"up","down","left","right"};
     void init();
     Board(int);
-    void print();
+    void print(string tips="BOARD");
     void print(board_type board);
     void display();
     Site locate_space(int num=SPACE_FILL);
@@ -93,6 +93,7 @@ public:
     cost_type difference(board_type present);
     cost_type steps(board_type present);
     cost_type reverse(board_type present);
+    cost_type difference_reverse(board_type present);
     ~Board();
 
 };

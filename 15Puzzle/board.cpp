@@ -22,8 +22,10 @@ Board::Board(int size=4)
 void Board::init(){
     
 }
-void Board::print(){
+void Board::print(string tips){
+    cout<<"-------"+tips+"--------"<<endl;
     print(board);
+    cout<<endl;
 }
 void Board::print(board_type board){
     for(auto row:board){
@@ -123,6 +125,9 @@ void Board::shuffle(int steps){
 void Board::modStart(board_type board){
     this->board=board;
     start=board;
+    records.clear();
+    useful.clear();
+    visited.clear(); 
 }
 void Board::path(){
     board=target;
@@ -192,10 +197,14 @@ cost_type Board::reverse(board_type present){
             
         }
     }  
-    return difference*reverse_rate;
+    return difference*reverse_rate/2;
 }
 // ④ 为克服仅计算棋子逆转数目策略的局限，将位置不符棋子数目的总和与
 // 3 倍棋子逆转数目相加。
+
+cost_type Board::difference_reverse(board_type present){
+    return difference(present)+reverse(present);
+}
 void Board::simple(){
 
     priority_queue<open_simple_type,vector<open_simple_type>,greater<open_simple_type>> open;
@@ -290,7 +299,7 @@ void Board::better(cost_type(Board::*h)(board_type)){
         depth =open.top().costs[0];
         
         if(board==target){
-            cout<<"achieve target"<<endl;
+            cout<<"after "<<cnt<<" steps, achieve target"<<endl;
             break;
         }
         present=board;
@@ -342,10 +351,12 @@ void Board::BFS(){
     open.push(start);
     board_type present;
     Site temp_space;
+    int cnt=0;
     while(!open.empty()){
+        cnt++;
         board=open.front();
         if(board==target){
-            cout<<"BFS achieve target"<<endl;
+            cout<<"BFS after "<<cnt<<" steps,  achieve target"<<endl;
             break;
         }
         present=board;
