@@ -41,6 +41,9 @@ public:
         row=r;
         col=c;
     }
+    Site operator-(const Site& a)const{
+        return Site(row-a.row,col-a.col);
+    }
 
 
 };
@@ -67,8 +70,8 @@ public:
     void print();
     void print(board_type board);
     void display();
-    Site locate_space();
-    Site locate_space(board_type board);
+    Site locate_space(int num=SPACE_FILL);
+    Site locate_space(board_type board,int num=SPACE_FILL);
     void possible_direction();
     void exec_direction(board_type &board,int direction,Site &space);
     void exec_direction(int direction,Site &space);
@@ -79,6 +82,7 @@ public:
     void simple();// heuristic: h(x)=difference
     void better(cost_type(Board::*h)(board_type));
     cost_type difference(board_type present);
+    cost_type steps(board_type present);
     ~Board();
 
 };

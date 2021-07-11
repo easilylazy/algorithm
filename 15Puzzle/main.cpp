@@ -18,8 +18,11 @@ int main(void){
     cout<<"differ:"<<demo.difference(demo.board)<<endl;
 
     cost_type (Board::*pfunc)(board_type); //声明一个和参数类型一样的函数指针  
-    pfunc =& Board::difference; //指针指向要调用的函数  
+    pfunc =& Board::steps;//difference; //指针指向要调用的函数  
     demo.better(pfunc);
+
+    return 0;
+
     demo.path();
     
     Board demo2(3);

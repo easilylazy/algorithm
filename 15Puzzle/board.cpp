@@ -33,13 +33,14 @@ void Board::print(board_type board){
         cout<<endl;
     }
 }
-Site Board::locate_space(){
-    return locate_space(board);
+
+Site Board::locate_space(int num){
+    return locate_space(board,num);
 }
-Site Board::locate_space(board_type board){
+Site Board::locate_space(board_type board,int num){
     for(int i=0;i<=size_max;i++){
         for(int j=0;j<=size_max;j++){
-            if(board[i][j]==SPACE_FILL){
+            if(board[i][j]==num){
                 return Site(i,j);
             }
         }
@@ -148,6 +149,7 @@ void Board::path(){
     }
     print(target);
 }
+// ① 最简单的估价函数：取一格局与目的格局相比，其位置不符的棋子数目。
 cost_type Board::difference(board_type present){
     cost_type difference=0;
     for(int row=0;row<size;row++){
@@ -159,6 +161,23 @@ cost_type Board::difference(board_type present){
     }  
     return difference;
 }
+// ② 较好的估价函数：各棋子移到目的位置所需移动距离的总和。
+cost_type Board::steps(board_type present){
+    cout<<(locate_space(present)-locate_space(target)).col<<endl;
+    cout<<(locate_space(present)-locate_space(target)).row<<endl;
+    cost_type difference=0;
+    for(int row=0;row<size;row++){
+        for(int col=0;col<size;col++){
+            if(target[row][col]!=present[row][col]){
+                difference++;
+            }
+        }
+    }  
+    return difference;
+}
+// ③ 对每一对逆转棋子乘以一个倍数。
+// ④ 为克服仅计算棋子逆转数目策略的局限，将位置不符棋子数目的总和与
+// 3 倍棋子逆转数目相加。
 void Board::simple(){
 
     priority_queue<open_simple_type,vector<open_simple_type>,greater<open_simple_type>> open;
