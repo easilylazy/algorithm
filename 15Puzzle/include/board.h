@@ -5,6 +5,7 @@
 # include<queue>
 # define SPACE_FILL 0
 # define VERBOSE false//true
+# define MAXSTEPS 40000000
 using namespace std;
 typedef vector<vector<int>> board_type;
 typedef int direct_type;

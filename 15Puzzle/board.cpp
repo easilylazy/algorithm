@@ -280,18 +280,17 @@ void Board::better(cost_type(Board::*h)(board_type)){
 
     priority_queue<open_simple_type,vector<open_simple_type>,greater<open_simple_type>> open;
 
-    int depth;
+    int depth,new_depth;
     vector<int> costs(3);// depth;heuristic;total
     int heuristic=(this->*h)(start);
     costs={0,heuristic,heuristic};
     open.push(open_simple_type(start,costs));
-    // heuristic_type closed;
     board_type present;
     Site temp_space;
     int cnt=0;
     while(!open.empty()){
         cnt++;
-        if(cnt>1000){
+        if(cnt>MAXSTEPS){
             cout<<"over steps"<<endl;
             break;
         }
@@ -326,8 +325,9 @@ void Board::better(cost_type(Board::*h)(board_type)){
                 // add new appearance
                 if(visited.find(board)==visited.end()){
                     
-                    heuristic=difference(board);
-                    costs={depth+1,heuristic,depth+1+heuristic};
+                    heuristic=(this->*h)(board);
+                    new_depth=(depth+1);
+                    costs={new_depth,heuristic,new_depth+heuristic};
                     open.push(open_simple_type(board,costs));
                     if(VERBOSE){
                         cout<<"----------update-------"<<endl;
